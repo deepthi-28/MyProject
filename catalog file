@@ -1,71 +1,47 @@
-import { createBackend } from '@backstage/backend-defaults';
+import { SignInPage } from '@backstage/core-components';
 
-import githubAuthModule from '@backstage/plugin-auth-backend-module-github-provider';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
 
-
-const backend = createBackend();
-
-
-backend.add(import('@backstage/plugin-app-backend'));
-
-backend.add(import('@backstage/plugin-proxy-backend'));
-
-backend.add(import('@backstage/plugin-scaffolder-backend'));
-
-backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
-
-backend.add(import('@backstage/plugin-techdocs-backend'));
+// ...other imports...
 
 
-// auth plugin
+const app = createApp({
 
-backend.add(import('@backstage/plugin-auth-backend'));
+// ...other config...
 
-backend.add(githubAuthModule); // Register GitHub auth provider
+components: {
 
-backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
+SignInPage: props => (
 
+<SignInPage
 
-// catalog plugin
+{...props}
 
-backend.add(import('@backstage/plugin-catalog-backend'));
+auto
 
-backend.add(import('@backstage/plugin-catalog-backend-module-github'));
+providers={[
 
-backend.add(
+{
 
-import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
+id: 'github',
 
-);
+title: 'GitHub',
 
-backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
+message: 'Sign in using your GitHub account',
 
+apiRef: githubAuthApiRef,
 
-// permission plugin
+},
 
-backend.add(import('@backstage/plugin-permission-backend'));
+]}
 
-backend.add(
+/>
 
-import('@backstage/plugin-permission-backend-module-allow-all-policy'),
+),
 
-);
+},
 
-
-// search plugin
-
-backend.add(import('@backstage/plugin-search-backend'));
-
-backend.add(import('@backstage/plugin-search-backend-module-pg'));
-
-backend.add(import('@backstage/plugin-search-backend-module-catalog'));
-
-backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
+});
 
 
-// kubernetes
-
-backend.add(import('@backstage/plugin-kubernetes-backend'));
-
-
-backend.start();
+// ...routes and export...
