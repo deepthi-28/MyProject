@@ -1,137 +1,71 @@
-app:
+import { createBackend } from '@backstage/backend-defaults';
 
-title: Scaffolded Backstage App
+import githubAuthModule from '@backstage/plugin-auth-backend-module-github-provider';
 
-baseUrl: http://localhost:3000
 
+const backend = createBackend();
 
-organization:
 
-name: My Company
+backend.add(import('@backstage/plugin-app-backend'));
 
+backend.add(import('@backstage/plugin-proxy-backend'));
 
-backend:
+backend.add(import('@backstage/plugin-scaffolder-backend'));
 
-baseUrl: http://localhost:7007
+backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 
-listen:
+backend.add(import('@backstage/plugin-techdocs-backend'));
 
-port: 7007
 
-csp:
+// auth plugin
 
-connect-src: ["'self'", 'http:', 'https:']
+backend.add(import('@backstage/plugin-auth-backend'));
 
-cors:
+backend.add(githubAuthModule); // Register GitHub auth provider
 
-origin: http://localhost:3000
+backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 
-methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
 
-credentials: true
+// catalog plugin
 
-database:
+backend.add(import('@backstage/plugin-catalog-backend'));
 
-client: better-sqlite3
+backend.add(import('@backstage/plugin-catalog-backend-module-github'));
 
-connection: ':memory:'
+backend.add(
 
+import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 
-integrations:
+);
 
-github:
+backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
 
-- host: github.com
 
-token: <PERSONAL_ACCESS_TOKEN>
+// permission plugin
 
-orgs:
+backend.add(import('@backstage/plugin-permission-backend'));
 
-- BackstageInfyDevelopers
+backend.add(
 
+import('@backstage/plugin-permission-backend-module-allow-all-policy'),
 
-auth:
+);
 
-environment: development
 
-providers:
+// search plugin
 
-github:
+backend.add(import('@backstage/plugin-search-backend'));
 
-development:
+backend.add(import('@backstage/plugin-search-backend-module-pg'));
 
-clientId: <CLIENT_ID>
+backend.add(import('@backstage/plugin-search-backend-module-catalog'));
 
-clientSecret: <CLIENT_SECRET>
+backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 
-signIn:
 
-resolvers:
+// kubernetes
 
-- resolver: emailLocalPartMatchingUserEntityName
+backend.add(import('@backstage/plugin-kubernetes-backend'));
 
-allowedDomains:
 
-- infoys.com
-
-dangerouslyAllowSignInWithoutUserInCatalog: true
-
-organizations:
-
-- BackstageInfyDevelopers
-
-
-catalog:
-
-providers:
-
-github:
-
-BackstageInfyDevelopers:
-
-organization: BackstageInfyDevelopers
-
-schedule:
-
-frequency: { minutes: 30 }
-
-timeout: { minutes: 3 }
-
-import:
-
-entityFilename: catalog-info.yaml
-
-pullRequestBranchName: backstage-integration
-
-rules:
-
-- allow: [Component, System, API, Resource, Location]
-
-locations:
-
-- type: file
-
-target: ../../examples/entities.yaml
-
-- type: file
-
-target: ../../examples/template/template.yaml
-
-rules:
-
-- allow: [Template]
-
-- type: file
-
-target: ../../examples/org.yaml
-
-rules:
-
-- allow: [User, Group]
-
-useUrlReadersSearch: true
-
-
-permission:
-
-enabled: true
+backend.start();
