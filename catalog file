@@ -1,0 +1,137 @@
+app:
+
+title: Scaffolded Backstage App
+
+baseUrl: http://localhost:3000
+
+
+organization:
+
+name: My Company
+
+
+backend:
+
+baseUrl: http://localhost:7007
+
+listen:
+
+port: 7007
+
+csp:
+
+connect-src: ["'self'", 'http:', 'https:']
+
+cors:
+
+origin: http://localhost:3000
+
+methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+
+credentials: true
+
+database:
+
+client: better-sqlite3
+
+connection: ':memory:'
+
+
+integrations:
+
+github:
+
+- host: github.com
+
+token: <PERSONAL_ACCESS_TOKEN>
+
+orgs:
+
+- BackstageInfyDevelopers
+
+
+auth:
+
+environment: development
+
+providers:
+
+github:
+
+development:
+
+clientId: <CLIENT_ID>
+
+clientSecret: <CLIENT_SECRET>
+
+signIn:
+
+resolvers:
+
+- resolver: emailLocalPartMatchingUserEntityName
+
+allowedDomains:
+
+- infoys.com
+
+dangerouslyAllowSignInWithoutUserInCatalog: true
+
+organizations:
+
+- BackstageInfyDevelopers
+
+
+catalog:
+
+providers:
+
+github:
+
+BackstageInfyDevelopers:
+
+organization: BackstageInfyDevelopers
+
+schedule:
+
+frequency: { minutes: 30 }
+
+timeout: { minutes: 3 }
+
+import:
+
+entityFilename: catalog-info.yaml
+
+pullRequestBranchName: backstage-integration
+
+rules:
+
+- allow: [Component, System, API, Resource, Location]
+
+locations:
+
+- type: file
+
+target: ../../examples/entities.yaml
+
+- type: file
+
+target: ../../examples/template/template.yaml
+
+rules:
+
+- allow: [Template]
+
+- type: file
+
+target: ../../examples/org.yaml
+
+rules:
+
+- allow: [User, Group]
+
+useUrlReadersSearch: true
+
+
+permission:
+
+enabled: true
