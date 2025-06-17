@@ -1,11 +1,6 @@
 import { SignInPage } from '@backstage/core-components';
 
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
-
-// ...other imports...
-     clientId: Ov23li9DGMWaLzgsZLP1
-        clientSecret: 34e4942ad8d925298a1e536c4427575ceb1b5273
-token: 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
 const app = createApp({
 
 // ...other config...
