@@ -17,7 +17,7 @@ backend:
     credentials: true
   database:
     client: better-sqlite3
-    connection: ':g4yiQ5Gk6X47nclZjIuUfNdCy2MTz7ASI0ihrUOY:'
+    connection: 'localhost'
       schedule:
           frequency: { minutes: 30 }
           timeout: { minutes: 3 }
