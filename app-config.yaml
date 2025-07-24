@@ -21,6 +21,13 @@ backend:
       schedule:
           frequency: { minutes: 30 }
           timeout: { minutes: 3 }
+   awsS3:
+      myAwsS3Provider:
+        bucketName: ${BUCKET_NAME} 
+        region: ${REGION}
+        schedule:
+          frequency: { minutes: 30 } 
+          timeout: { minutes: 3 }
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
