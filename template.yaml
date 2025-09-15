@@ -1,0 +1,25 @@
+# packages/app/templates/upload-file-hidden.yaml
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: upload-file-hidden-template
+  title: Upload File (Hidden/Encrypted)
+  description: Template to upload a file but hide its content in review
+spec:
+  owner: user:guest
+  type: service
+
+  parameters:
+    - title: Service Details
+      required:
+        - name
+        - myFile
+      properties:
+        name:
+          title: Service Name
+          type: string
+          description: Enter a kebab-case name
+        myFile:
+          title: Upload File
+          type: file
+          description: The uploaded file content will not be visible in review
