@@ -1,4 +1,4 @@
-import { Route } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import {
   CatalogEntityPage,
@@ -30,12 +30,14 @@ import {
   OAuthRequestDialog,
   SignInPage,
 } from '@backstage/core-components';
-import { createApp } from '@backstage/app-defaults';
+import { createApp } from '@backstage/app-defaults';  
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { ValidateKebabCaseFieldExtension } from './Scaffolder/ValidateKebabCase';
+import { ScaffolderFieldExtensions } from '@backstage/plugin-scaffolder-react';
+import { CustomReviewStep } from './Scaffolder/CustomReviewStep';
 
 const app = createApp({
   apis,
@@ -57,26 +59,13 @@ const app = createApp({
     });
   },
   components: {
-    SignInPage: props => (
-      <SignInPage
-        {...props}
-        auto
-        providers={[
-          'guest',
-          {
-            id: 'github-auth-provider',
-            title: 'GitHub',
-            message: 'Sign in using GitHub',
-            apiRef: githubAuthApiRef,
-          },
-        ]}
-      />
-    ),
+    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
   },
 });
 
 const routes = (
   <FlatRoutes>
+    <Route path="/" element={<Navigate to="catalog" />} />
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
@@ -93,7 +82,16 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage />} />
+    <Route
+  path="/create"
+  element={
+    <ScaffolderPage
+      components={{ ReviewStepComponent: CustomReviewStep }}
+    />
+  }
+/>
+
+
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/catalog-import"
