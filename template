@@ -1,0 +1,79 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: dynamic-subcategory-template
+  title: Instance creation
+  description: Shows subcategory dropdown based on category selection
+spec:
+  owner: user:default/deepthi
+  type: service
+
+  parameters:
+    - title: Select Category and Subcategory
+      properties:
+        category:
+          title: Category
+          type: string
+          enum: [AWS, AZURE]
+          ui:widget: select
+      required: [category]
+      dependencies:
+        category:
+          oneOf:
+            - properties:
+                category:
+                  enum: [AWS]
+                service:
+                  title: Service
+                  type: string
+                  enum: [EC2, RDS]
+                  ui:widget: select
+                awsaccount:
+                  title: AwsAccount
+                  type: string
+                  ui:widget: text
+                region:
+                  title: AWS Region
+                  type: string
+                  enum:
+                    - us-east-1
+                    - us-west-2
+                    - eu-west-1
+                    - ap-south-1
+                    - ap-northeast-1
+                  ui:widget: select
+              required: [service, awsaccount , region]
+
+            - properties:
+                category:
+                  enum: [AZURE]
+                service :
+                  title: Service 
+                  type: string
+                  enum: ['VM']
+                  ui:widget: select
+                resourcegroup:
+                  title: ResourceGroup
+                  type: string
+                  ui:widget: text
+                region :
+                  title: Region 
+                  type: string
+                  enum: ['central-ind', 'south-ind', east-us]
+                  ui:widget: select
+              required: [service, resourcegroup , region]
+
+  steps:
+    - id: log
+      name: Log Inputs
+      action: debug:log
+      input:
+        message: |
+          Category: ${{ parameters.category }}
+          Subcategory: ${{ parameters.subcategory }}
+          Region: ${{ parameters.region }}
+
+  output:
+    text:
+      - title: Category and subcategory selected successfully.
+        
